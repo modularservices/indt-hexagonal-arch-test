@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\vboxuser\\source\\repos\\indt-hexagonal-arch-test\\Indt.Teste.ContratacaoService\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{ECF57DA2-7B9B-8AB1-29F0-6F2F6E788C1A}|src\\Indt.Teste.ContratacaoService.Infra\\Indt.Teste.ContratacaoService.Infra.csproj|c:\\users\\vboxuser\\source\\repos\\indt-hexagonal-arch-test\\indt.teste.contratacaoservice\\src\\indt.teste.contratacaoservice.infra\\messaging\\consumers\\propostaaprovadaconsumer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ECF57DA2-7B9B-8AB1-29F0-6F2F6E788C1A}|src\\Indt.Teste.ContratacaoService.Infra\\Indt.Teste.ContratacaoService.Infra.csproj|solutionrelative:src\\indt.teste.contratacaoservice.infra\\messaging\\consumers\\propostaaprovadaconsumer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BFDF2AE9-4E2C-D58E-2417-12FAC876D8F2}|src\\Indt.Teste.ContratacaoService.Api\\Indt.Teste.ContratacaoService.Api.csproj|c:\\users\\vboxuser\\source\\repos\\indt-hexagonal-arch-test\\indt.teste.contratacaoservice\\src\\indt.teste.contratacaoservice.api\\controllers\\contratacoescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BFDF2AE9-4E2C-D58E-2417-12FAC876D8F2}|src\\Indt.Teste.ContratacaoService.Api\\Indt.Teste.ContratacaoService.Api.csproj|solutionrelative:src\\indt.teste.contratacaoservice.api\\controllers\\contratacoescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2194FD9E-0175-49C0-B36F-47F3472CA5D7}|tests\\Indt.Teste.ContratacaoService.UnitTests\\Indt.Teste.ContratacaoService.UnitTests.csproj|c:\\users\\vboxuser\\source\\repos\\indt-hexagonal-arch-test\\indt.teste.contratacaoservice\\tests\\indt.teste.contratacaoservice.unittests\\indt.teste.contratacaoservice.unittests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{2194FD9E-0175-49C0-B36F-47F3472CA5D7}|tests\\Indt.Teste.ContratacaoService.UnitTests\\Indt.Teste.ContratacaoService.UnitTests.csproj|solutionrelative:tests\\indt.teste.contratacaoservice.unittests\\indt.teste.contratacaoservice.unittests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ContratacoesController.cs",
+              "DocumentMoniker": "C:\\Users\\vboxuser\\source\\repos\\indt-hexagonal-arch-test\\Indt.Teste.ContratacaoService\\src\\Indt.Teste.ContratacaoService.Api\\Controllers\\ContratacoesController.cs",
+              "RelativeDocumentMoniker": "src\\Indt.Teste.ContratacaoService.Api\\Controllers\\ContratacoesController.cs",
+              "ToolTip": "C:\\Users\\vboxuser\\source\\repos\\indt-hexagonal-arch-test\\Indt.Teste.ContratacaoService\\src\\Indt.Teste.ContratacaoService.Api\\Controllers\\ContratacoesController.cs",
+              "RelativeToolTip": "src\\Indt.Teste.ContratacaoService.Api\\Controllers\\ContratacoesController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-29T13:50:21.527Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PropostaAprovadaConsumer.cs",
+              "DocumentMoniker": "C:\\Users\\vboxuser\\source\\repos\\indt-hexagonal-arch-test\\Indt.Teste.ContratacaoService\\src\\Indt.Teste.ContratacaoService.Infra\\Messaging\\Consumers\\PropostaAprovadaConsumer.cs",
+              "RelativeDocumentMoniker": "src\\Indt.Teste.ContratacaoService.Infra\\Messaging\\Consumers\\PropostaAprovadaConsumer.cs",
+              "ToolTip": "C:\\Users\\vboxuser\\source\\repos\\indt-hexagonal-arch-test\\Indt.Teste.ContratacaoService\\src\\Indt.Teste.ContratacaoService.Infra\\Messaging\\Consumers\\PropostaAprovadaConsumer.cs",
+              "RelativeToolTip": "src\\Indt.Teste.ContratacaoService.Infra\\Messaging\\Consumers\\PropostaAprovadaConsumer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-29T13:51:21.253Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Indt.Teste.ContratacaoService.UnitTests",
+              "DocumentMoniker": "C:\\Users\\vboxuser\\source\\repos\\indt-hexagonal-arch-test\\Indt.Teste.ContratacaoService\\tests\\Indt.Teste.ContratacaoService.UnitTests\\Indt.Teste.ContratacaoService.UnitTests.csproj",
+              "RelativeDocumentMoniker": "tests\\Indt.Teste.ContratacaoService.UnitTests\\Indt.Teste.ContratacaoService.UnitTests.csproj",
+              "ToolTip": "C:\\Users\\vboxuser\\source\\repos\\indt-hexagonal-arch-test\\Indt.Teste.ContratacaoService\\tests\\Indt.Teste.ContratacaoService.UnitTests\\Indt.Teste.ContratacaoService.UnitTests.csproj",
+              "RelativeToolTip": "tests\\Indt.Teste.ContratacaoService.UnitTests\\Indt.Teste.ContratacaoService.UnitTests.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-06-29T15:48:42.288Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

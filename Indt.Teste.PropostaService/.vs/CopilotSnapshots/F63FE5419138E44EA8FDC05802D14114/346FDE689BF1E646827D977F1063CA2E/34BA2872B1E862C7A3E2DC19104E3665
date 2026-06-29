@@ -1,0 +1,233 @@
+﻿using FluentAssertions;
+using Indt.Teste.PropostaService.Application.Common;
+using Indt.Teste.PropostaService.Application.Ports.Out;
+using Indt.Teste.PropostaService.Application.UseCases;
+using Indt.Teste.PropostaService.Domain.Entities;
+using Indt.Teste.PropostaService.Domain.Enums;
+using Indt.Teste.PropostaService.Domain.Exceptions;
+using Moq;
+
+namespace Indt.Teste.PropostaService.UnitTests.Application.UseCases;
+
+public class UpdatePropostaStatusUseCaseTests
+{
+    private readonly Mock<IPropostaRepository> _repositoryMock;
+    private readonly UpdatePropostaStatusUseCase _useCase;
+
+    public UpdatePropostaStatusUseCaseTests()
+    {
+        _repositoryMock = new Mock<IPropostaRepository>();
+        _useCase = new UpdatePropostaStatusUseCase(_repositoryMock.Object);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_ComPropostaNaoExistente_DeveRetornarFailure()
+    {
+        // Arrange
+        var propostaId = Guid.NewGuid();
+
+        _repositoryMock
+            .Setup(r => r.GetByIdAsync(propostaId))
+            .ReturnsAsync((Proposta?)null);
+
+        // Act
+        var result = await _useCase.ExecuteAsync(propostaId, StatusProposta.Aprovada);
+
+        // Assert
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Contain("Proposta não encontrada");
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_AprovarPropostaEmAnalise_DeveRetornarSucesso()
+    {
+        // Arrange
+        var proposta = new Proposta(
+            "PROP-001",
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            1000m
+        );
+
+        _repositoryMock
+            .Setup(r => r.GetByIdAsync(proposta.Id))
+            .ReturnsAsync(proposta);
+
+        _repositoryMock
+            .Setup(r => r.UpdateAsync(proposta))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _useCase.ExecuteAsync(proposta.Id, StatusProposta.Aprovada);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        proposta.Status.Should().Be(StatusProposta.Aprovada);
+        _repositoryMock.Verify(r => r.UpdateAsync(proposta), Times.Once);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_RejeitarPropostaEmAnalise_DeveRetornarSucesso()
+    {
+        // Arrange
+        var proposta = new Proposta(
+            "PROP-001",
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            1000m
+        );
+
+        _repositoryMock
+            .Setup(r => r.GetByIdAsync(proposta.Id))
+            .ReturnsAsync(proposta);
+
+        _repositoryMock
+            .Setup(r => r.UpdateAsync(proposta))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _useCase.ExecuteAsync(proposta.Id, StatusProposta.Rejeitada);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        proposta.Status.Should().Be(StatusProposta.Rejeitada);
+        _repositoryMock.Verify(r => r.UpdateAsync(proposta), Times.Once);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_AlterarStatusParaEmAnalise_DeveRetornarFailure()
+    {
+        // Arrange
+        var proposta = new Proposta(
+            "PROP-001",
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            1000m
+        );
+
+        _repositoryMock
+            .Setup(r => r.GetByIdAsync(proposta.Id))
+            .ReturnsAsync(proposta);
+
+        // Act
+        var result = await _useCase.ExecuteAsync(proposta.Id, StatusProposta.EmAnalise);
+
+        // Assert
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Contain("Não é possível alterar o status para 'Em Análise'");
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_ComStatusInvalido_DeveRetornarFailure()
+    {
+        // Arrange
+        var proposta = new Proposta(
+            "PROP-001",
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            1000m
+        );
+
+        _repositoryMock
+            .Setup(r => r.GetByIdAsync(proposta.Id))
+            .ReturnsAsync(proposta);
+
+        // Act - Usar um valor de status que não existe no enum (forcando através de cast)
+        var statusInvalido = (StatusProposta)999;
+        var result = await _useCase.ExecuteAsync(proposta.Id, statusInvalido);
+
+        // Assert
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Contain("Status inválido");
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_AprovadaParaRejeitada_DeveLancarException()
+    {
+        // Arrange
+        var proposta = new Proposta(
+            "PROP-001",
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            1000m
+        );
+        proposta.Aprovar();
+
+        _repositoryMock
+            .Setup(r => r.GetByIdAsync(proposta.Id))
+            .ReturnsAsync(proposta);
+
+        // Act
+        var result = await _useCase.ExecuteAsync(proposta.Id, StatusProposta.Rejeitada);
+
+        // Assert
+        result.IsFailure.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_DeveCallUpdateAsyncApenasUmaVez()
+    {
+        // Arrange
+        var proposta = new Proposta(
+            "PROP-001",
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            1000m
+        );
+
+        _repositoryMock
+            .Setup(r => r.GetByIdAsync(proposta.Id))
+            .ReturnsAsync(proposta);
+
+        _repositoryMock
+            .Setup(r => r.UpdateAsync(proposta))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        await _useCase.ExecuteAsync(proposta.Id, StatusProposta.Aprovada);
+
+        // Assert
+        _repositoryMock.Verify(r => r.UpdateAsync(proposta), Times.Once);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_DeveCallGetByIdAsync()
+    {
+        // Arrange
+        var propostaId = Guid.NewGuid();
+        var proposta = new Proposta(
+            "PROP-001",
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            1000m
+        );
+
+        _repositoryMock
+            .Setup(r => r.GetByIdAsync(propostaId))
+            .ReturnsAsync(proposta);
+
+        _repositoryMock
+            .Setup(r => r.UpdateAsync(proposta))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        await _useCase.ExecuteAsync(propostaId, StatusProposta.Aprovada);
+
+        // Assert
+        _repositoryMock.Verify(r => r.GetByIdAsync(propostaId), Times.Once);
+    }
+}

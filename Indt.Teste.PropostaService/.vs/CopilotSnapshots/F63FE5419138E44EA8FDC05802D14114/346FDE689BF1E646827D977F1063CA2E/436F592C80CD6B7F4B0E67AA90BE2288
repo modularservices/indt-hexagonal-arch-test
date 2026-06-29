@@ -1,0 +1,169 @@
+﻿using FluentAssertions;
+using Indt.Teste.PropostaService.Application.Models;
+using Indt.Teste.PropostaService.Application.Ports.Out;
+using Indt.Teste.PropostaService.Application.UseCases;
+using Indt.Teste.PropostaService.Domain.Entities;
+using Moq;
+
+namespace Indt.Teste.PropostaService.UnitTests.Application.UseCases;
+
+public class CreatePropostaUseCaseTests
+{
+    private readonly Mock<IPropostaRepository> _repositoryMock;
+    private readonly CreatePropostaUseCase _useCase;
+
+    public CreatePropostaUseCaseTests()
+    {
+        _repositoryMock = new Mock<IPropostaRepository>();
+        _useCase = new CreatePropostaUseCase(_repositoryMock.Object);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_ComDadosValidos_DeveCriarPropostaComSucesso()
+    {
+        // Arrange
+        var clienteId = Guid.NewGuid();
+        var seguradoraId = Guid.NewGuid();
+        var corretorId = Guid.NewGuid();
+        var produtoSeguroId = Guid.NewGuid();
+        var valor = 1000m;
+
+        _repositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<Proposta>()))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _useCase.ExecuteAsync(clienteId, seguradoraId, corretorId, produtoSeguroId, valor);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
+        result.Value!.Id.Should().NotBe(Guid.Empty);
+        result.Value.NumeroProposta.Should().NotBeNullOrEmpty();
+        result.Value.Status.Should().Be("EmAnalise");
+        _repositoryMock.Verify(r => r.AddAsync(It.IsAny<Proposta>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_RepositorioLancaExcecao_DeveRetornarFailure()
+    {
+        // Arrange
+        var clienteId = Guid.NewGuid();
+        var seguradoraId = Guid.NewGuid();
+        var corretorId = Guid.NewGuid();
+        var produtoSeguroId = Guid.NewGuid();
+        var valor = 1000m;
+        var mensagemErro = "Erro de banco de dados";
+
+        _repositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<Proposta>()))
+            .ThrowsAsync(new Exception(mensagemErro));
+
+        // Act
+        var result = await _useCase.ExecuteAsync(clienteId, seguradoraId, corretorId, produtoSeguroId, valor);
+
+        // Assert
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Contain("Erro ao criar proposta");
+        result.Error.Should().Contain(mensagemErro);
+        result.Value.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_DeveGerarNumeroProposta()
+    {
+        // Arrange
+        var clienteId = Guid.NewGuid();
+        var seguradoraId = Guid.NewGuid();
+        var corretorId = Guid.NewGuid();
+        var produtoSeguroId = Guid.NewGuid();
+        var valor = 1000m;
+
+        _repositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<Proposta>()))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _useCase.ExecuteAsync(clienteId, seguradoraId, corretorId, produtoSeguroId, valor);
+
+        // Assert
+        result.Value!.NumeroProposta.Should().HaveLength(10);
+        result.Value.NumeroProposta.Should().MatchRegex("^[A-F0-9]+$");
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_DeveRetornarPropostaCriada()
+    {
+        // Arrange
+        var clienteId = Guid.NewGuid();
+        var seguradoraId = Guid.NewGuid();
+        var corretorId = Guid.NewGuid();
+        var produtoSeguroId = Guid.NewGuid();
+        var valor = 5000m;
+
+        _repositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<Proposta>()))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _useCase.ExecuteAsync(clienteId, seguradoraId, corretorId, produtoSeguroId, valor);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
+        result.Value!.Id.Should().NotBe(Guid.Empty);
+        result.Value.Status.Should().NotBeNullOrEmpty();
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(100)]
+    [InlineData(999999.99)]
+    public async Task ExecuteAsync_ComValoresDiferentes_DeveCriarPropostaComSucesso(decimal valor)
+    {
+        // Arrange
+        var clienteId = Guid.NewGuid();
+        var seguradoraId = Guid.NewGuid();
+        var corretorId = Guid.NewGuid();
+        var produtoSeguroId = Guid.NewGuid();
+
+        _repositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<Proposta>()))
+            .Returns(Task.CompletedTask);
+
+        // Act
+        var result = await _useCase.ExecuteAsync(clienteId, seguradoraId, corretorId, produtoSeguroId, valor);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_DevePassarPropostaParaRepository()
+    {
+        // Arrange
+        var clienteId = Guid.NewGuid();
+        var seguradoraId = Guid.NewGuid();
+        var corretorId = Guid.NewGuid();
+        var produtoSeguroId = Guid.NewGuid();
+        var valor = 1000m;
+
+        Proposta? propostaCaptured = null;
+
+        _repositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<Proposta>()))
+            .Callback<Proposta>(p => propostaCaptured = p)
+            .Returns(Task.CompletedTask);
+
+        // Act
+        await _useCase.ExecuteAsync(clienteId, seguradoraId, corretorId, produtoSeguroId, valor);
+
+        // Assert
+        propostaCaptured.Should().NotBeNull();
+        propostaCaptured!.ClienteId.Should().Be(clienteId);
+        propostaCaptured.SeguradoraId.Should().Be(seguradoraId);
+        propostaCaptured.CorretorId.Should().Be(corretorId);
+        propostaCaptured.ProdutoSeguroId.Should().Be(produtoSeguroId);
+        propostaCaptured.Valor.Should().Be(valor);
+    }
+}

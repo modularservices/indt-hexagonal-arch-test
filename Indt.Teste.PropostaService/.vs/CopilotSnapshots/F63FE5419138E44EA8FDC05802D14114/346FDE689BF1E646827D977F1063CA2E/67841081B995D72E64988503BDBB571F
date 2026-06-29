@@ -1,0 +1,160 @@
+﻿using FluentAssertions;
+using Indt.Teste.PropostaService.Application.Models;
+using Indt.Teste.PropostaService.Application.Ports.Out;
+using Indt.Teste.PropostaService.Application.UseCases;
+using Moq;
+
+namespace Indt.Teste.PropostaService.UnitTests.Application.UseCases;
+
+public class ListPropostasUseCaseTests
+{
+    private readonly Mock<IPropostaRepository> _repositoryMock;
+    private readonly ListPropostasUseCase _useCase;
+
+    public ListPropostasUseCaseTests()
+    {
+        _repositoryMock = new Mock<IPropostaRepository>();
+        _useCase = new ListPropostasUseCase(_repositoryMock.Object);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_ComPropostasExistentes_DeveRetornarLista()
+    {
+        // Arrange
+        var propostas = new List<PropostaDetailsReadModel>
+        {
+            new()
+            {
+                Id = Guid.NewGuid(),
+                NumeroProposta = "PROP-001",
+                ClienteNome = "Cliente 1",
+                Status = "EmAnalise",
+                Valor = 1000m
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                NumeroProposta = "PROP-002",
+                ClienteNome = "Cliente 2",
+                Status = "Aprovada",
+                Valor = 2000m
+            }
+        };
+
+        _repositoryMock
+            .Setup(r => r.GetAllAsync())
+            .ReturnsAsync(propostas);
+
+        // Act
+        var result = await _useCase.ExecuteAsync();
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().HaveCount(2);
+        result[0].NumeroProposta.Should().Be("PROP-001");
+        result[1].NumeroProposta.Should().Be("PROP-002");
+        _repositoryMock.Verify(r => r.GetAllAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_SemPropostas_DeveRetornarListaVazia()
+    {
+        // Arrange
+        var propostas = new List<PropostaDetailsReadModel>();
+
+        _repositoryMock
+            .Setup(r => r.GetAllAsync())
+            .ReturnsAsync(propostas);
+
+        // Act
+        var result = await _useCase.ExecuteAsync();
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeEmpty();
+        _repositoryMock.Verify(r => r.GetAllAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_DeveRetornarTodasAsPropostas()
+    {
+        // Arrange
+        var propostas = new List<PropostaDetailsReadModel>
+        {
+            new() { Id = Guid.NewGuid(), NumeroProposta = "PROP-001" },
+            new() { Id = Guid.NewGuid(), NumeroProposta = "PROP-002" },
+            new() { Id = Guid.NewGuid(), NumeroProposta = "PROP-003" },
+            new() { Id = Guid.NewGuid(), NumeroProposta = "PROP-004" },
+            new() { Id = Guid.NewGuid(), NumeroProposta = "PROP-005" }
+        };
+
+        _repositoryMock
+            .Setup(r => r.GetAllAsync())
+            .ReturnsAsync(propostas);
+
+        // Act
+        var result = await _useCase.ExecuteAsync();
+
+        // Assert
+        result.Should().HaveCount(5);
+        result.Should().ContainItemsAssignableTo<PropostaDetailsReadModel>();
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_DeveCallRepositoryUmaVez()
+    {
+        // Arrange
+        _repositoryMock
+            .Setup(r => r.GetAllAsync())
+            .ReturnsAsync(new List<PropostaDetailsReadModel>());
+
+        // Act
+        await _useCase.ExecuteAsync();
+
+        // Assert
+        _repositoryMock.Verify(r => r.GetAllAsync(), Times.Once);
+        _repositoryMock.VerifyNoOtherCalls();
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_DeveRetornarPropostasComDadosCompletos()
+    {
+        // Arrange
+        var dataCriacao = DateTime.UtcNow;
+        var propostas = new List<PropostaDetailsReadModel>
+        {
+            new()
+            {
+                Id = Guid.NewGuid(),
+                NumeroProposta = "PROP-2024-001",
+                ClienteNome = "João Silva",
+                SeguradoraNome = "Seguros Vida",
+                CorretorNome = "Maria Corretor",
+                ProdutoSeguroNome = "Seguro Integral",
+                Valor = 5000m,
+                Status = "Aprovada",
+                DataCriacao = dataCriacao
+            }
+        };
+
+        _repositoryMock
+            .Setup(r => r.GetAllAsync())
+            .ReturnsAsync(propostas);
+
+        // Act
+        var result = await _useCase.ExecuteAsync();
+
+        // Assert
+        result.Should().HaveCount(1);
+        var proposta = result[0];
+        proposta.Id.Should().NotBe(Guid.Empty);
+        proposta.NumeroProposta.Should().Be("PROP-2024-001");
+        proposta.ClienteNome.Should().Be("João Silva");
+        proposta.SeguradoraNome.Should().Be("Seguros Vida");
+        proposta.CorretorNome.Should().Be("Maria Corretor");
+        proposta.ProdutoSeguroNome.Should().Be("Seguro Integral");
+        proposta.Valor.Should().Be(5000m);
+        proposta.Status.Should().Be("Aprovada");
+        proposta.DataCriacao.Should().Be(dataCriacao);
+    }
+}
