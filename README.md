@@ -4,7 +4,14 @@
 
 O cenário proposto foi ter 2 microsserviços, 1 de propostas de seguros e outro, responsável por fazer as contratações quando a proposta estiver aprovada.
 
-Fluxo:
+## O que o projeto contempla
+
+- Domain-Driven Design (Propostas e Contratações sao subdomínios do dominio Seguros e PropostaService, ContratacaoService seriam bounded contexts)<br>
+- Principios SOLID<br>
+- REST API + Event-Driven usando RabbitMQ<br>
+- Clean Code
+
+## Fluxo:
 
 1. A proposta é criada via endpoint REST em PropostaService com status 'Em Análise'.
 2. Outro endpoint permite atualizar o status da proposta para 'Aprovada'.
@@ -22,13 +29,6 @@ Fluxo:
 Docker<br>
 SQL Server containerizado<br>
 RabbitMQ containerizado
-
-## O que o projeto contempla
-
-Domain-Driven Design (Seguros é o domínio, Propostas e Contratações sao subdomínios e PropostaService, ContratacaoService seriam bounded contexts)
-Principios SOLID
-REST API + Event-Driven usando RabbitMQ
-Clean Code
 
 ## Instruções Gerais
 
