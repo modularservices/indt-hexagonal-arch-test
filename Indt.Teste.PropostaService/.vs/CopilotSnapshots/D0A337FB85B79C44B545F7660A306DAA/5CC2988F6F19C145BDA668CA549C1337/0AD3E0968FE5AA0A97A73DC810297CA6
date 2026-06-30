@@ -1,8 +1,0 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
-
-namespace Indt.Teste.PropostaService.IntegrationTests.TestHelpers;
-
-public class CustomWebApplicationFactory : WebApplicationFactory<Program>
-{
-}
