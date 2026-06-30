@@ -6,7 +6,7 @@ O cenário proposto foi ter 2 microsserviços, 1 de propostas de seguros e outro
 
 ## O que o projeto contempla
 
-- Domain-Driven Design (Propostas e Contratações sao subdomínios do dominio Seguros e PropostaService, ContratacaoService seriam bounded contexts)<br>
+- Domain-Driven Design (Proposta e Contratação sao subdomínios do dominio Seguros e PropostaService, ContratacaoService seriam bounded contexts)<br>
 - Principios SOLID<br>
 - REST API + Event-Driven usando RabbitMQ<br>
 - Clean Code
