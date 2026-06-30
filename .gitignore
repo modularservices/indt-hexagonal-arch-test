@@ -23,6 +23,12 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
+
+# Temp
+*.tmp
+*.temp
+
+# Logs
 [Ll]og/
 [Ll]ogs/
 
