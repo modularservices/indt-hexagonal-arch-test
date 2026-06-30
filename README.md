@@ -18,7 +18,7 @@ O cenário proposto foi ter 2 microsserviços, 1 de propostas de seguros e outro
 3. Ao fazer a aprovação, é enviada mensagem com id da proposta a uma fila do RabbitMQ.
 4. ContratacaoService consome a mensagem dessa fila.
 5. Ao consumir a mensagem, ele persiste em banco próprio o id da proposta e data da contratação.
-6. Faz chamada no endpoint de PropostaService pra mudar o status da proposta para 'Contratada'.
+6. Faz chamada em outro endpoint "interno" de PropostaService pra efetivar a contratação da proposta (status 'Contratada').
 
 <br>
 
