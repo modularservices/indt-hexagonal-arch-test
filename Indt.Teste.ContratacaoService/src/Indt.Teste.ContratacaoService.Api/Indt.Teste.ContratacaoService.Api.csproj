@@ -7,8 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\Requests\" />
-    <Folder Include="Contracts\Responses\" />
+    <Compile Remove="Contracts\**" />
+    <Content Remove="Contracts\**" />
+    <EmbeddedResource Remove="Contracts\**" />
+    <None Remove="Contracts\**" />
   </ItemGroup>
 
   <ItemGroup>
