@@ -23,7 +23,12 @@ Docker<br>
 SQL Server containerizado<br>
 RabbitMQ containerizado
 
+## O que o projeto contempla
 
+Domain-Driven Design (Seguros é o domínio, Propostas e Contratações sao subdomínios e PropostaService, ContratacaoService seriam bounded contexts)
+Principios SOLID
+REST API + Event-Driven usando RabbitMQ
+Clean Code
 
 ## Instruções Gerais
 
