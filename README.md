@@ -6,10 +6,17 @@ O cenário proposto foi ter 2 microsserviços, 1 de propostas de seguros e outro
 
 ## O que o projeto contempla
 
-- Domain-Driven Design (Proposta e Contratação sao subdomínios do dominio Seguros e PropostaService, ContratacaoService seriam bounded contexts)<br>
-- Principios SOLID<br>
-- REST API + Event-Driven usando RabbitMQ<br>
+- RESTful API + Event-Driven usando RabbitMQ
+- Arquitetura de código hexagonal (ports and adapters)
+- DDD: Proposta e Contratação representam subdomínios dentro do domínio de Seguros. Já PropostaService e ContratacaoService atuam como bounded contexts
+- Docker: SQL Server e RabbitMQ containerizados
+- Setup dos bancos ao subir PropostaService
+- Princípios SOLID
 - Clean Code
+- Observabilidade com Correlation ID
+- Middleware para tratamento global de exceções + Result Pattern
+- Repository pattern + EF Core e Dapper
+- Testes automatizados (unitários e de integração)
 
 ## Fluxo:
 
