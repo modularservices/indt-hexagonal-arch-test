@@ -13,7 +13,7 @@ O cenário proposto foi ter 2 microsserviços, 1 de propostas de seguros e outro
 - Setup dos bancos ao subir PropostaService
 - Princípios SOLID
 - Clean Code
-- Observabilidade com Correlation ID
+- Observabilidade com Correlation ID, suporte a logs com Serilog
 - Middleware para tratamento global de exceções + Result Pattern
 - Repository pattern + EF Core e Dapper
 - Testes automatizados (unitários e de integração)
